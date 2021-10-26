@@ -74,12 +74,29 @@ def getSign(s):
         signStr+="{}={}".format(i,s[i])
     signStr+="&{}".format('ytUQ7l2ZZu8mLvJZ')
     return signStr
-def submitForm(signInstanceWid,awid,bwid,extension,username,deviceId):
+def DESEncrypt(s,Key="b3L26XNL"):
+    iv = b"\x01\x02\x03\x04\x05\x06\x07\x08"
+    k = des(Key, CBC, iv, pad=None, padmode=PAD_PKCS5)
+    encrypt_str = k.encrypt(s)
+    return base64.b64encode(encrypt_str).decode()
+
+def submitForm(signInstanceWid,awid,bwid,username,deviceId):
     url = "https://sziit.campusphere.net/wec-counselor-sign-apps/stu/sign/submitSign"
+    extension = {
+            "systemName": "android",
+            "systemVersion": "11",
+            "model": "MI11",
+            "deviceId": deviceId,
+            "appVersion": "9.0.12",
+            "lon": 114.222802,
+            "lat": 22.69165,
+            "userId": username,
+    }
+    extensionStr = DESEncrypt(json.dumps(extension))
     header= {
     'Content-Type': 'application/json;charset=UTF-8',
     'User-Agent': ua,
-    'Cpdaily-Extension':extension
+    'Cpdaily-Extension':extensionStr
     }
     bodyString={"longitude":114.222802,"latitude":22.69165,"isMalposition":0,"abnormalReason":"","signPhotoUrl":"","isNeedExtra":1,"position":"广东省深圳市龙岗区龙格路303号","uaIsCpadaily":true,"signInstanceWid":str(signInstanceWid),"extraFieldItems":[{"extraFieldItemValue":"否","extraFieldItemWid":str(awid)},{"extraFieldItemValue":"否","extraFieldItemWid":str(bwid)}]}
     payload = {"appVersion":"9.0.12","systemName":"android","bodyString":AESEncrypt(bodyString),"sign":getSign(bodyString),"model":"MI11","lon":114.222667,"calVersion":"firstv","systemVersion":"11","deviceId":deviceId+"XiaomiMI11","userId":username,"version":"first_v2","lat":22.691832}
@@ -90,14 +107,12 @@ def submitForm(signInstanceWid,awid,bwid,extension,username,deviceId):
 if __name__ == '__main__':
     username = os.environ["USERNAME"]
     password = os.environ["PASSWORD"]
-    extension = os.environ["CPDAILY_EXTENSION"]
     deviceId = os.environ["DEVICEID"]
     username = username.split("&")
     password = password.split("&")
-    extension = extension.split("&")
     deviceId = deviceId.split("&")
     for i in range(len(username)):
         getLogin(username[i],password[i])
         getInfos()
         getForm(signInstanceWid,signWid)
-        submitForm(signInstanceWid,awid,bwid,extension[i],username[i],deviceId[i])
+        submitForm(signInstanceWid,awid,bwid,username[i],deviceId[i])
