@@ -35,5 +35,5 @@ jobs:
       env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          CPDAILY_EXTENSION: ${{ secrets.CPDAILY_EXTENSION }}
+          DEVICEID: ${{ secrets.DEVICEID }}
       run: python cpdaily.py
