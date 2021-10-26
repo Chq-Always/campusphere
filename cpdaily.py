@@ -43,6 +43,7 @@ def getLogin(username,password):
 def getInfos():
     url = "https://sziit.campusphere.net/wec-counselor-sign-apps/stu/sign/getStuSignInfosInOneDay"
     response = session.post(url, headers={'Content-Type': 'application/json;charset=UTF-8','User-Agent': ua}, data="{}")
+    print(response.text)
     d = json.loads(response.text)
     global signInstanceWid
     global signWid
