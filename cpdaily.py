@@ -4,6 +4,9 @@ import execjs
 import requests
 from bs4 import BeautifulSoup as bs
 import os
+import base64
+import hashlib
+import pyaes
 
 ua = 'Mozilla/5.0 (Linux; Android 11; M2102J2SC Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.210 Mobile Safari/537.36 okhttp/3.12.4 cpdaily/9.0.12 wisedu/9.0.12'
 
