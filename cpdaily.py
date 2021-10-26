@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 import os
 
-ua = 'Mozilla/5.0 (Linux; Android 11; M2102J2SC) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Mobile Safari/537.36'
+ua = 'Mozilla/5.0 (Linux; Android 11; M2102J2SC Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.210 Mobile Safari/537.36 okhttp/3.12.4 cpdaily/9.0.12 wisedu/9.0.12'
 
 def getLogin(username,password):
     url="https://auth.sziit.edu.cn/authserver/login?service=https://sziit.campusphere.net/iap/loginSuccess"
@@ -60,16 +60,29 @@ def getForm(signInstanceWid,signWid):
     awid=d["datas"]["extraField"][0]["extraFieldItems"][1]["wid"]
     bwid=d["datas"]["extraField"][1]["extraFieldItems"][1]["wid"]
 
-
-
-def submitForm(signInstanceWid,awid,bwid,extension):
+def AESEncrypt(s,key='ytUQ7l2ZZu8mLvJZ'):
+    iv = b'\x01\x02\x03\x04\x05\x06\x07\x08\t\x01\x02\x03\x04\x05\x06\x07'
+    Encrypter=pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key.encode('utf-8'),iv))
+    Encrypted=Encrypter.feed(s)
+    Encrypted+=Encrypter.feed()
+    return base64.b64encode(Encrypted).decode()
+def getSign(s):
+    signStr=""
+    for i in s:
+        if signStr:
+            signStr+="&"
+        signStr+="{}={}".format(i,s[i])
+    signStr+="&{}".format('ytUQ7l2ZZu8mLvJZ')
+    return signStr
+def submitForm(signInstanceWid,awid,bwid,extension,username,deviceId):
     url = "https://sziit.campusphere.net/wec-counselor-sign-apps/stu/sign/submitSign"
     header= {
     'Content-Type': 'application/json;charset=UTF-8',
     'User-Agent': ua,
     'Cpdaily-Extension':extension
     }
-    payload={"longitude":114.222966,"latitude":22.691566,"isMalposition":0,"abnormalReason":"","signPhotoUrl":"","isNeedExtra":1,"position":"中国广东省深圳市龙岗区龙格路301号","uaIsCpadaily":"true","signInstanceWid":str(signInstanceWid),"osgnVersion":"1.0.0","extraFieldItems":[{"extraFieldItemValue":"否","extraFieldItemWid":str(awid)},{"extraFieldItemValue":"否","extraFieldItemWid":str(bwid)}]}
+    bodyString={"longitude":114.222802,"latitude":22.69165,"isMalposition":0,"abnormalReason":"","signPhotoUrl":"","isNeedExtra":1,"position":"广东省深圳市龙岗区龙格路303号","uaIsCpadaily":true,"signInstanceWid":str(signInstanceWid),"extraFieldItems":[{"extraFieldItemValue":"否","extraFieldItemWid":str(awid)},{"extraFieldItemValue":"否","extraFieldItemWid":str(bwid)}]}
+    payload = {"appVersion":"9.0.12","systemName":"android","bodyString":AESEncrypt(bodyString),"sign":getSign(bodyString),"model":"MI11","lon":114.222667,"calVersion":"firstv","systemVersion":"11","deviceId":deviceId+"XiaomiMI11","userId":username,"version":"first_v2","lat":22.691832}
     response = session.post(url, headers=header, json=payload)
     print(response.text)
 
@@ -78,11 +91,13 @@ if __name__ == '__main__':
     username = os.environ["USERNAME"]
     password = os.environ["PASSWORD"]
     extension = os.environ["CPDAILY_EXTENSION"]
+    deviceId = os.environ["DEVICEID"]
     username = username.split("&")
     password = password.split("&")
     extension = extension.split("&")
+    deviceId = deviceId.split("&")
     for i in range(len(username)):
         getLogin(username[i],password[i])
         getInfos()
         getForm(signInstanceWid,signWid)
-        submitForm(signInstanceWid,awid,bwid,extension[i])
+        submitForm(signInstanceWid,awid,bwid,extension[i],username[i],deviceId[i])
