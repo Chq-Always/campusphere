@@ -102,8 +102,8 @@ def submitForm(signInstanceWid,awid,bwid,username,deviceId):
     'User-Agent': ua,
     'Cpdaily-Extension':extensionStr
     }
-    bodyString={"longitude":114.222802,"latitude":22.69165,"isMalposition":0,"abnormalReason":"","signPhotoUrl":"","isNeedExtra":1,"position":"广东省深圳市龙岗区龙格路303号","uaIsCpadaily":'true',"signInstanceWid":str(signInstanceWid),"extraFieldItems":[{"extraFieldItemValue":"否","extraFieldItemWid":str(awid)},{"extraFieldItemValue":"否","extraFieldItemWid":str(bwid)}]}
-    payload = {"appVersion":"9.0.12","systemName":"android","bodyString":AESEncrypt(bodyString),"sign":getSign(bodyString),"model":"MI11","lon":114.222667,"calVersion":"firstv","systemVersion":"11","deviceId":deviceId+"XiaomiMI11","userId":username,"version":"first_v2","lat":22.691832}
+    bodyString={"longitude":114.222802,"latitude":22.69165,"isMalposition":0,"abnormalReason":"","signPhotoUrl":"","isNeedExtra":1,"position":"广东省深圳市龙岗区龙格路303号","uaIsCpadaily":"true","signInstanceWid":str(signInstanceWid),"extraFieldItems":[{"extraFieldItemValue":"否","extraFieldItemWid":str(awid)},{"extraFieldItemValue":"否","extraFieldItemWid":str(bwid)}]}
+    payload = {"appVersion":"9.0.12","systemName":"android","bodyString":AESEncrypt(str(bodyString)),"sign":getSign(str(bodyString)),"model":"MI11","lon":114.222667,"calVersion":"firstv","systemVersion":"11","deviceId":deviceId+"XiaomiMI11","userId":username,"version":"first_v2","lat":22.691832}
     response = session.post(url, headers=header, json=payload)
     print(response.text)
 
