@@ -7,6 +7,7 @@ import os
 import base64
 import hashlib
 import pyaes
+from pyDes import des, CBC, PAD_PKCS5
 
 ua = 'Mozilla/5.0 (Linux; Android 11; M2102J2SC) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.85 Mobile Safari/537.36'
 
@@ -43,7 +44,6 @@ def getLogin(username,password):
 def getInfos():
     url = "https://sziit.campusphere.net/wec-counselor-sign-apps/stu/sign/getStuSignInfosInOneDay"
     response = session.post(url, headers={'Content-Type': 'application/json;charset=UTF-8','User-Agent': ua}, data="{}")
-    print(response.text)
     d = json.loads(response.text)
     global signInstanceWid
     global signWid
