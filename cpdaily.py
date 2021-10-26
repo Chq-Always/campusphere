@@ -97,16 +97,16 @@ def submitForm(signInstanceWid,awid,bwid,username,deviceId):
             "userId": username,
     }
     extensionStr = DESEncrypt(json.dumps(extension))
-    bodystr =AESEncrypt(str(bodyString))
-    print(bodystr)
-    print(extensionStr)
+
+
+
     header= {
     'Content-Type': 'application/json;charset=UTF-8',
     'User-Agent': 'Mozilla/5.0 (Linux; Android 11; M2102J2SC Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.210 Mobile Safari/537.36 cpdaily/9.0.12 wisedu/9.0.12',
     'Cpdaily-Extension':extensionStr
     }
     bodyString={"longitude":114.222802,"latitude":22.69165,"isMalposition":0,"abnormalReason":"","signPhotoUrl":"","isNeedExtra":1,"position":"\xe5\xb9\xbf\xe4\xb8\x9c\xe7\x9c\x81\xe6\xb7\xb1\xe5\x9c\xb3\xe5\xb8\x82\xe9\xbe\x99\xe5\xb2\x97\xe5\x8c\xba\xe9\xbe\x99\xe6\xa0\xbc\xe8\xb7\xaf303\xe5\x8f\xb7","uaIsCpadaily":"true","signInstanceWid":str(signInstanceWid),"extraFieldItems":[{"extraFieldItemValue":"\xe5\x90\xa6","extraFieldItemWid":str(awid)},{"extraFieldItemValue":"\xe5\x90\xa6","extraFieldItemWid":str(bwid)}]}
-    payload = {"appVersion":"9.0.12","systemName":"android","bodyString":bodystr,"sign":getSign(bodyString),"model":"MI11","lon":114.222667,"calVersion":"firstv","systemVersion":"11","deviceId":deviceId+"XiaomiMI11","userId":username,"version":"first_v2","lat":22.691832}
+    payload = {"appVersion":"9.0.12","systemName":"android","bodyString":AESEncrypt(str(bodyString)),"sign":getSign(bodyString),"model":"MI11","lon":114.222667,"calVersion":"firstv","systemVersion":"11","deviceId":deviceId+"XiaomiMI11","userId":username,"version":"first_v2","lat":22.691832}
     response = session.post(url, headers=header, json=payload)
     print(response.text)
 
