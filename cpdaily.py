@@ -77,7 +77,7 @@ def getSign(s):
             signStr+="&"
         signStr+="{}={}".format(i,s[i])
     signStr+="&{}".format('ytUQ7l2ZZu8mLvJZ')
-    return signStr
+    return hashlib.md5(signStr.encode()).hexdigest()
 def DESEncrypt(s,Key="b3L26XNL"):
     iv = b"\x01\x02\x03\x04\x05\x06\x07\x08"
     k = des(Key, CBC, iv, pad=None, padmode=PAD_PKCS5)
