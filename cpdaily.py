@@ -121,8 +121,7 @@ def submitForm(signInstanceWid,awid,bwid,username,deviceId):
             "userId":username
         }
     signStr = getSign(toSign)
-    print(bodyString)
-    print(signStr)
+
     payload = {"appVersion":"9.0.12","systemName":"android","bodyString":bodyString,"sign":signStr,"model":"MI11","lon":114.222667,"calVersion":"firstv","systemVersion":"11","deviceId":deviceId+"XiaomiMI11","userId":username,"version":"first_v2","lat":22.691832}
     
     response = session.post(url, headers=header, json=payload)
