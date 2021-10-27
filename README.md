@@ -3,7 +3,7 @@
 深信今日校园签到
 
 
-CPDAILY_EXTENSION
+DEVICEID
 
 
 PASSWORD
