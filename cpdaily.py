@@ -108,7 +108,7 @@ def submitForm(signInstanceWid,awid,bwid,username,deviceId):
         'Cpdaily-Extension':extensionStr
     }
     bodyString={"longitude":114.222802,"latitude":22.69165,"isMalposition":0,"abnormalReason":"","signPhotoUrl":"","isNeedExtra":1,"position":"\xe5\xb9\xbf\xe4\xb8\x9c\xe7\x9c\x81\xe6\xb7\xb1\xe5\x9c\xb3\xe5\xb8\x82\xe9\xbe\x99\xe5\xb2\x97\xe5\x8c\xba\xe9\xbe\x99\xe6\xa0\xbc\xe8\xb7\xaf303\xe5\x8f\xb7","uaIsCpadaily":"true","signInstanceWid":str(signInstanceWid),"extraFieldItems":[{"extraFieldItemValue":"\xe5\x90\xa6","extraFieldItemWid":str(awid)},{"extraFieldItemValue":"\xe5\x90\xa6","extraFieldItemWid":str(bwid)}]}
-    bodyString = AESEncrypt(str(bodyString))
+    bodyString = AESEncrypt(json.dumps(bodyString))
     toSign = {
             "appVersion":"9.0.12",
             "bodyString":bodyString,
@@ -121,6 +121,8 @@ def submitForm(signInstanceWid,awid,bwid,username,deviceId):
             "userId":username
         }
     signStr = getSign(toSign)
+    print(bodyString)
+    print(signStr)
     payload = {"appVersion":"9.0.12","systemName":"android","bodyString":bodyString,"sign":signStr,"model":"MI11","lon":114.222667,"calVersion":"firstv","systemVersion":"11","deviceId":deviceId+"XiaomiMI11","userId":username,"version":"first_v2","lat":22.691832}
     
     response = session.post(url, headers=header, json=payload)
